@@ -43,7 +43,7 @@ async function generateImg(){
 
   const API_URL = 'https://api.openai.com/v1/images/generations';
 
-  const apiKey = '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';
+  const apiKey = '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';
   const prompt = 'Cat';
 
   const fetchOptions = await fetch(API_URL,{
