@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPENAI API</title>
+    <script src="api.js" > </script>
+    <script src="confetti.js" > </script>
+</head>
+
+
+<style>
+body {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 3rem;
+  height: 100vh;
+  height: fit-content;
+  margin: 0;
+}
+
+
+.container {
+  
+  display: flex;
+  justify-content: stretch;
+  align-content: center;
+  flex-direction: column;
+  min-height: 550px;
+  height: fit-content;
+  margin-right: 60px;
+
+}
+
+p{
+    text-align: center; 
+    font-size: 1em;
+    font-weight: bold;
+    padding:10px;
+}
+
+div.header{
+    
+    justify-content: center;
+    align-items: center;
+}
+
+
+img{
+    display: block;
+
+    width: 300px;
+    height: 300px;
+    border: 10px solid #eeeeee;
+}
+
+img#logo{
+    width:11em;
+    height: 4em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: none;
+}
+
+.fc{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+footer{
+     
+     display:flex;
+     justify-content: center;
+}
+
+p.foot{
+    font-size:20px;
+}
+
+p#score{
+    font-size:40px;
+}
+
+button#tryagain{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translateX(-50%);
+    
+}
+
+#images{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 50px;
+}
+
+#btn{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translateX(-50%);
+}
+
+.button {
+  min-width: 300px;
+  min-height: 60px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #313133;
+  background: #4FD1C5;
+background: linear-gradient(90deg, rgba(129,230,217,1) 0%, rgba(79,209,197,1) 100%);
+  border: none;
+  border-radius: 1000px;
+  box-shadow: 12px 12px 24px rgba(79,209,197,.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  padding: 10px;
+  }
+
+button::before {
+content: '';
+  border-radius: 1000px;
+  min-width: calc(300px + 12px);
+  min-height: calc(60px + 12px);
+  border: 6px solid #00FFCB;
+  box-shadow: 0 0 60px rgba(0,255,203,.64);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all .3s ease-in-out 0s;
+}
+
+.button:hover, .button:focus {
+  color: #313133;
+  transform: translateY(-6px);
+}
+
+button:hover::before, button:focus::before {
+  opacity: 1;
+}
+
+
+
+button:hover::after, button:focus::after {
+  animation: none;
+  display: none;
+}
+
+
+
+.lds-hourglass {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+
+}
+.lds-hourglass:after {
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  margin: 8px;
+  box-sizing: border-box;
+  border: 32px solid #fff;
+  border-color: #fff transparent #fff transparent;
+  animation: lds-hourglass 1.2s infinite;
+}
+@keyframes lds-hourglass {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  100% {
+    transform: rotate(1800deg);
+  }
+}
+
+
+/* create the paw prints */
+.pad {
+    width: 25px;
+    height: 27px;
+    background-color: #ffffff;
+    -webkit-border-radius: 63px 63px 63px 63px / 108px     108px 72px 72px;
+    border-radius: 50%  50%  50%  50%  / 60%   60%         40%  40%;
+    display: block;
+    position: absolute;
+}       
+.large {
+   width: 70px;
+   height: 80px;
+   transform: rotate(80deg);
+   left: 100px;
+   top: 50px;
+} 
+.small-1 {
+   transform: rotate(50deg);
+   left: 145px;
+   top: 28px;
+}
+.small-2 {
+   transform: rotate(65deg);
+   left: 174px;
+   top: 50px;
+}  
+.small-3 {
+   transform: rotate(98deg);
+   position: absolute;
+   left: 178px;
+   top: 87px;
+}
+.small-4 {
+   transform: rotate(140deg);
+   position: absolute;
+   left: 158px;
+   top: 117px;
+}
+    
+/* position and animate */
+    
+.paw-print-1 {
+  opacity: 0;
+  position: absolute;
+  left: 75px;
+  top: 300px;
+  transform: rotate(-40deg);
+  -webkit-animation: walk 3s linear infinite;
+  animation: /*keyframe*/walk /*duration*/3s /*transition*/linear /*repeat*/infinite;
+}
+.paw-print-2 {
+  opacity: 0;
+  position: absolute;
+  left: 275px;
+  top: 280px;
+  transform: rotate(-5deg); 
+  -webkit-animation: walk 3s linear infinite 0.25s;
+  animation: walk 3s linear infinite /*delay*/0.25s;
+}
+.paw-print-3 {
+  opacity: 0;
+  position: absolute;
+  left: 375px;
+  top: 130px;
+  transform: rotate(-10deg); 
+  -webkit-animation: walk 3s linear infinite 0.5s;
+  animation: walk 3s linear infinite 0.5s;
+}     
+.paw-print-4 {
+  opacity: 0;
+  position: absolute;
+  left: 575px;
+  top: 280px;
+  transform: rotate(-20deg); 
+  -webkit-animation: walk 3s linear infinite 0.75s;
+  animation: walk 3s linear infinite 0.75s;
+}    
+.paw-print-5 {
+  opacity: 0;
+  position: absolute;
+  left: 725px;
+  top: 50px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1s;
+  animation: walk 3s linear infinite 1s;
+}   
+.paw-print-6 {
+  opacity: 0;
+  position: absolute;
+  left: 875px;
+  top: 200px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1.25s;
+  animation: walk 3s linear infinite 1.25s;
+}   
+.paw-print-7 {
+  opacity: 0;
+  position: absolute;
+  left: 1075px;
+  top: 50px;
+  transform: rotate(20deg); 
+  -webkit-animation: walk 3s linear infinite 1.5s;
+  animation: walk 3s linear infinite 1.5s;
+}   
+.paw-print-8 {
+  opacity: 0;
+  position: absolute;
+  left: 1150px;
+  top: 250px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1.75s;
+  animation: walk 3s linear infinite 1.75s;
+}
+    
+/* walking effect animation keyframes */
+    
+@-webkit-keyframes walk {
+  25%  {opacity: 1;}
+  100% {opacity: 0;}
+}
+    
+@keyframes walk {
+  /* appear */
+  25%  {opacity: 1;}
+  /* disappear */
+  100% {opacity: 0;}
+}
+
+#paw{
+    margin-top:5%;
+    position: absolute;
+}
+
+
+
+</style>
+<body>
+
+
+        <img src="/logo2-2.png" id="logo" alt="logo of a cat">
+        <p id="score"></p>
+        <div class="container">
+           
+            <div class="fc">
+                <p></p>
+                
+                <div class="lds-hourglass" id="abc"> </div>
+            </div>
+            <div id="images">
+                <img src="https://www.destructoid.com/wp-content/uploads/2020/12/473199-AAF2.jpg" id="id1">
+                <img src="https://www.destructoid.com/wp-content/uploads/2020/12/473199-AAF2.jpg" id="id2">
+                <img src="https://www.destructoid.com/wp-content/uploads/2020/12/473199-AAF2.jpg" id="id3">
+            </div>
+        
+                <button class="button" id="btn">Try Again!</button>
+                <div class="paws" id="paw">
+                    <div class="paw-print-1">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                        
+                    <div class="paw-print-2">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>    
+                        
+                    <div class="paw-print-3">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>    
+                        
+                    <div class="paw-print-4">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                        
+                    <div class="paw-print-5">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                        
+                    <div class="paw-print-6">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                        
+                    <div class="paw-print-7">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                    
+                    <div class="paw-print-8">
+                        <div class="pad large"></div>
+                        <div class="pad small-1"></div>
+                        <div class="pad small-2"></div>
+                        <div class="pad small-3"></div>
+                        <div class="pad small-4"></div>
+                    </div>
+                </div>
+      
+        </div>
+
+        
+        <footer>
+            <p class="foot"><i>All Rights Reserved &#169;</i></p>
+        </footer>
+
+</body>
+</html>
